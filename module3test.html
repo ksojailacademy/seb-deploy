@@ -2,35 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Launching Module 3…</title>
+  <title>Module 3 Test</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2em; }
+    .btn { display: inline-block; margin-top: 1em; padding: 0.75em 1.5em;
+           background: #007bff; color: #fff; text-decoration: none; border-radius: 4px; }
+    .btn:hover { background: #0056b3; }
+  </style>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // 1) Fire off SEB
-      window.location.href = 
-        'sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb';
-      
-      // 2) After a short pause, try to close this tab
-      setTimeout(function() {
-        // Trick the browser into letting us close
-        window.open('', '_self');
-        window.close();
-      }, 500);
+    document.addEventListener('DOMContentLoaded', () => {
+      const now   = Date.now();
+      const start = Date.parse('2025-07-23T09:09:00-05:00');
+      const end   = Date.parse('2025-07-23T09:10:00-05:00');
 
-      // 3) If close() is blocked, redirect back to Canvas home after 2s
-      setTimeout(function() {
-        window.location.href = 
-          'https://canvas.instructure.com/courses/12457781';
-      }, 2000);
+      if (now < start) {
+        document.body.innerHTML = `<h1>Module 3 Test</h1>
+          <p>Exam not yet open.<br>Please come back at 9:09 AM Central.</p>`;
+      }
+      else if (now > end) {
+        document.body.innerHTML = `<h1>Module 3 Test</h1>
+          <p>Exam window has closed.<br>You can no longer launch.</p>`;
+      }
+      else {
+        // In‑window: fire SEB and try closing the tab
+        window.location.href =
+          'sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb';
+        setTimeout(()=>{
+          window.open('','_self');
+          window.close();
+        }, 500);
+      }
     });
   </script>
 </head>
 <body>
-  <p style="text-align:center; margin-top:2em;">
-    If nothing happens automatically, 
-    <a href="sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb"
-       class="Button">
-      Launch Module 3 Test
-    </a>
-  </p>
+  <noscript>
+    <h1>Module 3 Test</h1>
+    <p><a href="sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb"
+          class="btn">Launch Module 3 Test</a></p>
+  </noscript>
 </body>
 </html>
