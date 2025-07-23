@@ -3,6 +3,10 @@
 <head>
   <meta charset="utf-8">
   <title>Module 3 Test</title>
+  <!-- Prevent browser & proxy caching -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma"        content="no-cache">
+  <meta http-equiv="Expires"       content="0">
   <style>
     body { font-family: sans-serif; text-align: center; padding: 2em; }
     .btn { display: inline-block; margin-top: 1em; padding: 0.75em 1.5em;
@@ -10,21 +14,19 @@
     .btn:hover { background: #0056b3; }
   </style>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', ()=> {
       const now   = Date.now();
-      const start = Date.parse('2025-07-23T09:40:00-05:00');
-      const end   = Date.parse('2025-07-23T09:42:00-05:00');
-
+      const start = Date.parse('2025-07-23T09:55:00-05:00');
+      const end   = Date.parse('2025-07-23T09:57:00-05:00');
       if (now < start) {
-        document.body.innerHTML = `<h1>Module 3 Test</h1>
-          <p>Exam not yet open.<br>Please come back at 9:35 AM Central.</p>`;
+        document.body.innerHTML = '<h1>Module 3 Test</h1>'
+          + '<p>The exam is not yet open.<br>Please return at 9:55 AM CDT.</p>';
       }
       else if (now > end) {
-        document.body.innerHTML = `<h1>Module 3 Test</h1>
-          <p>Exam window has closed.<br>You can no longer launch.</p>`;
+        document.body.innerHTML = '<h1>Module 3 Test</h1>'
+          + '<p>The exam window has closed.<br>You can no longer access the test for Module 3.</p>';
       }
       else {
-        // In‑window: fire SEB and try closing the tab
         window.location.href =
           'sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb';
         setTimeout(()=>{
