@@ -12,12 +12,12 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const now   = Date.now();
-      const start = Date.parse('2025-07-23T09:09:00-05:00');
-      const end   = Date.parse('2025-07-23T09:10:00-05:00');
+      const start = Date.parse('2025-07-23T09:27:00-05:00');
+      const end   = Date.parse('2025-07-23T09:29:00-05:00');
 
       if (now < start) {
         document.body.innerHTML = `<h1>Module 3 Test</h1>
-          <p>Exam not yet open.<br>Please come back at 9:09 AM Central.</p>`;
+          <p>Exam not yet open.<br>Please come back at 9:27 AM Central.</p>`;
       }
       else if (now > end) {
         document.body.innerHTML = `<h1>Module 3 Test</h1>
