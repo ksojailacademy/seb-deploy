@@ -1,15 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Launching Module 3…</title>
-  <meta http-equiv="refresh"
-        content="0; url=sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb">
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 1) Fire off SEB
+      window.location.href = 
+        'sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb';
+      
+      // 2) After a short pause, try to close this tab
+      setTimeout(function() {
+        // Trick the browser into letting us close
+        window.open('', '_self');
+        window.close();
+      }, 500);
+
+      // 3) If close() is blocked, redirect back to Canvas home after 2s
+      setTimeout(function() {
+        window.location.href = 
+          'https://canvas.instructure.com/courses/12457781';
+      }, 2000);
+    });
+  </script>
 </head>
 <body>
-  If you’re not redirected automatically,<br>
-  <a href="sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb">
-    click here
-  </a>.
+  <p style="text-align:center; margin-top:2em;">
+    If nothing happens automatically, 
+    <a href="sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb"
+       class="Button">
+      Launch Module 3 Test
+    </a>
+  </p>
 </body>
 </html>
