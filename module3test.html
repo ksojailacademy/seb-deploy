@@ -3,10 +3,6 @@
 <head>
   <meta charset="utf-8">
   <title>Module 3 Test</title>
-  <!-- Prevent browser & proxy caching -->
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma"        content="no-cache">
-  <meta http-equiv="Expires"       content="0">
   <style>
     body { font-family: sans-serif; text-align: center; padding: 2em; }
     .btn { display: inline-block; margin-top: 1em; padding: 0.75em 1.5em;
@@ -14,10 +10,19 @@
     .btn:hover { background: #0056b3; }
   </style>
   <script>
-    document.addEventListener('DOMContentLoaded', ()=> {
+    (function() {
+      // 1) Append a cache‑buster if missing
+      const url = new URL(window.location.href);
+      if (!url.searchParams.has('cb')) {
+        url.searchParams.set('cb', Date.now());
+        window.location.replace(url.toString());
+        return;
+      }
+      // 2) Time‑gate and launch SEB
       const now   = Date.now();
       const start = Date.parse('2025-07-24T07:20:00-05:00');
       const end   = Date.parse('2025-07-24T07:25:00-05:00');
+
       if (now < start) {
         document.body.innerHTML = '<h1>Module 3 Test</h1>'
           + '<p>The exam is not yet open.<br>Please return at 7:20 AM CDT.</p>';
@@ -28,20 +33,25 @@
       }
       else {
         window.location.href =
-          'sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb';
+          'sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb?cb='
+          + Date.now();
         setTimeout(()=>{
           window.open('','_self');
           window.close();
         }, 500);
       }
-    });
+    })();
   </script>
 </head>
 <body>
   <noscript>
     <h1>Module 3 Test</h1>
-    <p><a href="sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb"
-          class="btn">Launch Module 3 Test</a></p>
+    <p>
+      <a href="sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb"
+         class="btn">
+        Launch Module 3 Test
+      </a>
+    </p>
   </noscript>
 </body>
 </html>
