@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Module 4 Test</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2em; }
+    .btn { display: inline-block; margin-top: 1em; padding: 0.75em 1.5em;
+           background: #007bff; color: #fff; text-decoration: none; border-radius: 4px; }
+    .btn:hover { background: #0056b3; }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1) Append a cache‑buster if missing
+      const url = new URL(window.location.href);
+      if (!url.searchParams.has('cb')) {
+        url.searchParams.set('cb', Date.now());
+        window.location.replace(url.toString());
+        return;
+      }
+
+      // 2) Time‑gate and launch SEB
+      const now   = Date.now();
+      const end   = Date.parse('2025-08-06T07:25:00-05:00');
+
+      if (now > end) {
+        document.body.innerHTML = 
+          '<h1>Module 4 Test</h1>' +
+          '<p>The testing window has closed.<br>You can no longer access the test for Module 4.</p>';
+      }
+      else {
+        // In‑window: launch SEB and try to close this tab
+        window.location.href =
+          'sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module4.seb?cb='
+          + Date.now();
+        setTimeout(() => {
+          window.open('', '_self');
+          window.close();
+        }, 500);
+      }
+    });
+  </script>
+</head>
+<body>
+  <noscript>
+    <h1>Module 4 Test</h1>
+    <p>
+      <a href="sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module4.seb"
+         class="btn">
+        Launch Module 4 Test
+      </a>
+    </p>
+  </noscript>
+</body>
+</html>
