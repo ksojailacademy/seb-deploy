@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Module 3 Test</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2em; }
+    .btn {
+      display: inline-block;
+      margin-top: 1em;
+      padding: 0.75em 1.5em;
+      background: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+    .btn:hover { background: #0056b3; }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const url    = new URL(window.location.href);
+      const params = url.searchParams;
+
+      // 1) Cache‑buster
+      if (!params.has('cb')) {
+        params.set('cb', Date.now());
+        return window.location.replace(`${url.pathname}?${params}`);
+      }
+
+      // 2) Read start/end from URL (fallback to always‑open/never‑close)
+      const now   = Date.now();
+      const start = params.has('start') ? Date.parse(params.get('start')) : -Infinity;
+      const end   = params.has('end')   ? Date.parse(params.get('end'))   :  Infinity;
+
+      if (now < start) {
+        document.body.innerHTML =
+          '<h1>Module 3 Test</h1>' +
+          '<p>The exam is not yet open.<br>' +
+          `Please return at ${new Date(start).toLocaleString()}.</p>`;
+      }
+      else if (now > end) {
+        document.body.innerHTML =
+          '<h1>Module 3 Test</h1>' +
+          '<p>The testing window has closed.<br>' +
+          'You can no longer access this test.</p>';
+      }
+      else {
+        // 3) In‑window: launch SEB
+        window.location.href =
+          'sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb?cb='
+          + Date.now();
+      }
+    });
+  </script>
+</head>
+<body>
+  <noscript>
+    <h1>Module 3 Test</h1>
+    <p>
+      <a href="sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb"
+         class="btn">
+        Launch Module 3 Test
+      </a>
+    </p>
+  </noscript>
+</body>
+</html>
