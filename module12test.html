@@ -5,29 +5,55 @@
   <title>Module 12 Test</title>
   <style>
     body { font-family: sans-serif; text-align: center; padding: 2em; }
-    .btn { display: inline-block; margin-top: 1em; padding: 0.75em 1.5em;
-           background: #007bff; color: #fff; text-decoration: none; border-radius: 4px; }
+    .btn {
+      display: inline-block;
+      margin-top: 1em;
+      padding: 0.75em 1.5em;
+      background: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+    }
     .btn:hover { background: #0056b3; }
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const url = new URL(window.location.href);
-      if (!url.searchParams.has('cb')) {
-        url.searchParams.set('cb', Date.now());
-        return window.location.replace(url.toString());
+      const url    = new URL(window.location.href);
+      const params = url.searchParams;
+
+      // 1) Cache‑buster
+      if (!params.has('cb')) {
+        params.set('cb', Date.now());
+        return window.location.replace(`${url.pathname}?${params}`);
       }
-      const now = Date.now();
-      const end = Date.parse('2025-08-18T16:10:00-05:00');
-      if (now > end) {
+
+      // 2) Read start/end window
+      const now   = Date.now();
+      const start = params.has('start') ? Date.parse(params.get('start')) : -Infinity;
+      const end   = params.has('end')   ? Date.parse(params.get('end'))   :  Infinity;
+
+      if (now < start) {
+        document.body.innerHTML =
+          '<h1>Module 12 Test</h1>' +
+          '<p>The exam is not yet open.<br>' +
+          `Please return - ${new Date(start).toLocaleString()}.</p>`;
+      }
+      else if (now > end) {
         document.body.innerHTML =
           '<h1>Module 12 Test</h1>' +
           '<p>The testing window has closed.<br>' +
-          'You can no longer access Module 12.</p>';
-      } else {
-        window.location.href =
+          'You can no longer access this test.</p>';
+      }
+      else {
+        // 3) Live window: launch SEB with visible fallback
+        const sebsUrl = 
           'sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module12.seb?cb='
           + Date.now();
-        setTimeout(() => { window.open('','_self'); window.close(); }, 500);
+        document.body.innerHTML =
+          '<h1>Module 12 Test</h1>' +
+          '<p>Launching your exam…<br>' +
+          `If you aren’t prompted, <a href="${sebsUrl}" class="btn">click here</a>.</p>`;
+        window.location.href = sebsUrl;
       }
     });
   </script>
@@ -35,8 +61,12 @@
 <body>
   <noscript>
     <h1>Module 12 Test</h1>
-    <p><a href="sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module12.seb"
-          class="btn">Launch Module 12 Test</a></p>
+    <p>
+      <a href="sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module12.seb"
+         class="btn">
+        Launch Module 12 Test
+      </a>
+    </p>
   </noscript>
 </body>
 </html>
