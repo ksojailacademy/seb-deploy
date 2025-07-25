@@ -27,7 +27,7 @@
         return window.location.replace(`${url.pathname}?${params}`);
       }
 
-      // 2) Read start/end from URL (fallback to always‑open/never‑close)
+      // 2) Read start/end window
       const now   = Date.now();
       const start = params.has('start') ? Date.parse(params.get('start')) : -Infinity;
       const end   = params.has('end')   ? Date.parse(params.get('end'))   :  Infinity;
@@ -45,10 +45,19 @@
           'You can no longer access this test.</p>';
       }
       else {
-        // 3) In‑window: launch SEB
-        window.location.href =
+        // 3) Live window: launch SEB with visible fallback
+        const sebsUrl = 
           'sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module3.seb?cb='
           + Date.now();
+        document.body.innerHTML =
+          '<h1>Module 3 Test</h1>' +
+          '<p>Launching your exam…<br>' +
+          `If you aren’t prompted, <a href="${sebsUrl}" class="btn">click here</a>.</p>`;
+        window.location.href = sebsUrl;
+        setTimeout(() => {
+          window.open('', '_self');
+          window.close();
+        }, 500);
       }
     });
   </script>
