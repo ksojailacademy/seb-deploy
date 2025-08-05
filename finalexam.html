@@ -35,14 +35,14 @@
       if (now < start) {
         document.body.innerHTML =
           '<h1>Final Exam</h1>' +
-          '<p>The exam is not yet open.<br>' +
+          '<p>The final exam is not yet open.<br>' +
           `Please return - ${new Date(start).toLocaleString()}.</p>`;
       }
       else if (now > end) {
         document.body.innerHTML =
           '<h1>Final Exam</h1>' +
           '<p>The testing window has closed.<br>' +
-          'You can no longer access this test.</p>';
+          'You can no longer access the final exam.</p>';
       }
       else {
         // 3) Live window: launch SEB with visible fallback
@@ -54,6 +54,10 @@
           '<p>Launching your exam…<br>' +
           `If you aren’t prompted, <a href="${sebsUrl}" class="btn">click here</a>.</p>`;
         window.location.href = sebsUrl;
+        setTimeout(() => {
+          window.open('', '_self');
+          window.close();
+        }, 5000);
       }
     });
   </script>
