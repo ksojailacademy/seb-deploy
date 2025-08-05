@@ -54,6 +54,10 @@
           '<p>Launching your exam…<br>' +
           `If you aren’t prompted, <a href="${sebsUrl}" class="btn">click here</a>.</p>`;
         window.location.href = sebsUrl;
+        setTimeout(() => {
+          window.open('', '_self');
+          window.close();
+        }, 5000);
       }
     });
   </script>

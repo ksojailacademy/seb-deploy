@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Module 6 Test</title>
+  <meta charset="utf-6">
+  <title>Module 6 Test</title>
   <style>
     body { font-family: sans-serif; text-align: center; padding: 2em; }
     .btn {
       display: inline-block;
       margin-top: 1em;
-      padding: 0.75em 1.5em;
-      background: #007bff;
+      padding: 0.65em 1.5em;
+      background: #006bff;
       color: #fff;
       text-decoration: none;
       border-radius: 4px;
@@ -34,13 +34,13 @@
 
       if (now < start) {
         document.body.innerHTML =
-          '<h1>Module 6 Test</h1>' +
+          '<h1>Module 6 Test</h1>' +
           '<p>The exam is not yet open.<br>' +
           `Please return - ${new Date(start).toLocaleString()}.</p>`;
       }
       else if (now > end) {
         document.body.innerHTML =
-          '<h1>Module 6 Test</h1>' +
+          '<h1>Module 6 Test</h1>' +
           '<p>The testing window has closed.<br>' +
           'You can no longer access this test.</p>';
       }
@@ -50,21 +50,25 @@
           'sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module6.seb?cb='
           + Date.now();
         document.body.innerHTML =
-          '<h1>Module 6 Test</h1>' +
+          '<h1>Module 6 Test</h1>' +
           '<p>Launching your exam…<br>' +
           `If you aren’t prompted, <a href="${sebsUrl}" class="btn">click here</a>.</p>`;
         window.location.href = sebsUrl;
+        setTimeout(() => {
+          window.open('', '_self');
+          window.close();
+        }, 5000);
       }
     });
   </script>
 </head>
 <body>
   <noscript>
-    <h1>Module 6 Test</h1>
+    <h1>Module 6 Test</h1>
     <p>
       <a href="sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/module6.seb"
          class="btn">
-        Launch Module 6 Test
+        Launch Module 6 Test
       </a>
     </p>
   </noscript>
