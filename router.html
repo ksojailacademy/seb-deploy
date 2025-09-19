@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SEB Router</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <style>
+    body { font-family: system-ui, sans-serif; text-align: center; padding: 2rem; }
+    .msg { max-width: 48rem; margin: 0 auto; }
+    a.btn { display:inline-block; margin-top:1rem; padding:.6rem 1rem; border-radius:6px;
+            background:#0b5fff; color:#fff; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="msg" id="msg"><h1>Starting exam…</h1><p>Loading configuration…</p></div>
+  <script>
+    (async () => {
+      const params = new URL(location.href).searchParams;
+      const mod = params.get('module');  // e.g. "3", "4", "final"
+      if (!mod) {
+        document.getElementById('msg').innerHTML =
+          '<h1>Missing module</h1><p>This link is missing a module parameter.</p>';
+        return;
+      }
+      try {
+        // Always bypass cache
+        const cfg = await fetch('mapping.json?cb=' + Date.now(), { cache: 'no-store' }).then(r => r.json());
+
+        // keys like "module3", "module4", "final"
+        const key = (mod === 'final') ? 'final' : `module${mod}`;
+        const target = cfg[key];
+
+        // Basic safety: only allow Canvas quiz "take" URLs on the official domain
+        const ok = /^https:\/\/canvas\.instructure\.com\/courses\/\d+\/quizzes\/\d+\/?/.test(target || '');
+        if (!ok) throw new Error('Invalid or missing Canvas quiz URL for ' + key);
+
+        // Go to the quiz (SEB will already be running, since Start URL is this page)
+        location.href = target;
+      } catch (e) {
+        document.getElementById('msg').innerHTML =
+          '<h1>Could not resolve exam</h1><p>' + (e.message || e) + '</p>' +
+          '<p>Please contact your instructor.</p>';
+      }
+    })();
+  </script>
+</body>
+</html>
