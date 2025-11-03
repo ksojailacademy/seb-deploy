@@ -1,4 +1,4 @@
-m{
+{
   "module3":  "https://canvas.instructure.com/courses/12800498/quizzes/23211571/take",
   "module4":  "https://canvas.instructure.com/courses/12800498/quizzes/23211563/take",
   "module5":  "https://canvas.instructure.com/courses/12800498/quizzes/23211565/take",
@@ -10,6 +10,7 @@ m{
   "module11": "https://canvas.instructure.com/courses/12800498/quizzes/23211574/take",
   "module12": "https://canvas.instructure.com/courses/12800498/quizzes/23211566/take",
   "module13": "https://canvas.instructure.com/courses/12800498/quizzes/23211570/take",
-  "finalexam":    "https://canvas.instructure.com/courses/12800498/quizzes/23211572/take"
+  "finalexam": "https://canvas.instructure.com/courses/12800498/quizzes/23211572/take"
 }
+
 
