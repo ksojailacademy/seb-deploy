@@ -21,32 +21,75 @@
       const url    = new URL(window.location.href);
       const params = url.searchParams;
 
-      // 1) Cache‑buster
+      // 1) Cache-buster
       if (!params.has('cb')) {
         params.set('cb', Date.now());
         return window.location.replace(`${url.pathname}?${params}`);
       }
 
-      // 2) Read start/end window
-      const now   = Date.now();
-      const start = params.has('start') ? Date.parse(params.get('start')) : -Infinity;
-      const end   = params.has('end')   ? Date.parse(params.get('end'))   :  Infinity;
+      // --- DST-aware Central Time helpers ---
+      function secondSundayInMarchUTC(year){
+        const dow = new Date(Date.UTC(year, 2, 1)).getUTCDay(); // March=2
+        const date = 1 + ((7 - dow) % 7) + 7;                   // second Sunday
+        // Changeover at 2:00 AM CST (UTC-6) -> 08:00 UTC
+        return Date.UTC(year, 2, date, 8, 0, 0);
+      }
+      function firstSundayInNovemberUTC(year){
+        const dow = new Date(Date.UTC(year, 10, 1)).getUTCDay(); // Nov=10
+        const date = 1 + ((7 - dow) % 7);                        // first Sunday
+        // Changeover at 2:00 AM CDT (UTC-5) -> 07:00 UTC
+        return Date.UTC(year, 10, date, 7, 0, 0);
+      }
+      function centralIsDST(utcMs){
+        const d = new Date(utcMs);
+        const y = d.getUTCFullYear();
+        const start = secondSundayInMarchUTC(y);
+        const end   = firstSundayInNovemberUTC(y);
+        return utcMs >= start && utcMs < end;
+      }
+      // Parse "YYYY-MM-DDTHH:mm" as Central wall time; return UTC ms
+      function centralLocalToUTCms(isoLocal){
+        const [date, time='00:00'] = isoLocal.split('T');
+        const [Y, M, D] = date.split('-').map(Number);
+        const [h, m]    = time.split(':').map(Number);
+        // Guess with standard offset to evaluate DST boundary correctly
+        let utcGuess = Date.UTC(Y, (M-1), D, h + 6, m, 0);
+        const isDst  = centralIsDST(utcGuess);
+        const offset = isDst ? 5 : 6; // CDT=UTC-5, CST=UTC-6
+        return Date.UTC(Y, (M-1), D, h + offset, m, 0);
+      }
+      // Detect if param already has a timezone (Z or ±HH:MM)
+      function hasExplicitTZ(s){
+        return /Z$/i.test(s) || /[+-]\d{2}:?\d{2}$/.test(s);
+      }
+      // Convert param string to UTC ms, accepting either explicit TZ or Central wall time
+      function toUTCms(param){
+        if (!param) return null;
+        if (hasExplicitTZ(param)) return Date.parse(param);
+        return centralLocalToUTCms(param);
+      }
 
-      if (now < start) {
+      // 2) Read start/end window as UTC
+      const nowUTC = Date.now();
+      const startUTC = params.has('start') ? toUTCms(params.get('start')) : -Infinity;
+      const endUTC   = params.has('end')   ? toUTCms(params.get('end'))   :  Infinity;
+
+      if (nowUTC < startUTC) {
+        const when = params.get('start') || '';
         document.body.innerHTML =
           '<h1>Final Exam</h1>' +
-          '<p>The final exam is not yet open.<br>' +
-          `Please return - ${new Date(start).toLocaleString()}.</p>`;
+          '<p>The exam is not yet open.<br>' +
+          `Opens at <strong>${when}</strong> (Central).</p>`;
       }
-      else if (now > end) {
+      else if (nowUTC > endUTC) {
         document.body.innerHTML =
           '<h1>Final Exam</h1>' +
           '<p>The testing window has closed.<br>' +
-          'You can no longer access the final exam.</p>';
+          'You can no longer access this test.</p>';
       }
       else {
         // 3) Live window: launch SEB with visible fallback
-        const sebsUrl = 
+        const sebsUrl =
           'sebs://raw.githubusercontent.com/ksojailacademy/seb-deploy/main/tests/finalexam.seb?cb='
           + Date.now();
         document.body.innerHTML =
